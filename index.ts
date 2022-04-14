@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { ApolloServer, gql } from "apollo-server";
 import { PrismaClient } from "@prisma/client";
 
@@ -7,7 +8,7 @@ const prisma = new PrismaClient();
 async function main() {
   const newUser = await prisma.user.create({
     data: {
-      email: "toto@toto.com",
+      email: "toto3@toto.com",
       password: "toto",
       firstname: "Toto",
       lastname: "TotoLastName",

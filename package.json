@@ -6,7 +6,12 @@
   "scripts": {
     "start": "ts-node-dev src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate-dev": "npx prisma migrate dev"
+    "migrate-dev": "npx prisma migrate dev",
+    "reset":"npx prisma migrate reset",
+    "studio": "npx prisma studio"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +30,7 @@
     "class-validator": "^0.13.2",
     "graphql": "^15.8.0",
     "reflect-metadata": "^0.1.13",
+    "ts-node": "^10.7.0",
     "type-graphql": "^1.1.1"
   }
 }

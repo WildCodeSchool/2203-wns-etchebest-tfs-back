@@ -3,7 +3,7 @@
 
 //https://www.prisma.io/docs/concepts/components/prisma-schema/data-sources
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 

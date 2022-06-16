@@ -1,30 +1,73 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+//https://www.prisma.io/docs/concepts/components/prisma-schema/data-sources
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//https://www.prisma.io/docs/concepts/components/prisma-schema/generators
+//"npx prisma migrate" ou "npm run migrate dev" actionne les 2 générateurs à chaque fois que la commande est lancée.
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+generator typegraphql {
+  provider = "typegraphql-prisma"
+  output   = "../prisma/generated/type-graphql"
 }
 
+//https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
 model User{
   id Int @id @default(autoincrement())
   firstname String
   lastname String
   email String @unique
   password String
-  tickets Ticket[] 
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+  //Relations
+  comments Comment[]
+  tickets_author Ticket[] @relation("author")
+  tickets_assign Ticket[] @relation("assigned")
 }
 
+
+
 model Ticket{
-  id Int @id @default(autoincrement())
-  title String
+  id Int @id @default(autoincrement()) //For a string ID   --- id String @id @default(cuid())
+  title String 
   description String
-  status String
-  //Relation aves l'utilisateur
-  user    User   @relation(fields: [user_id], references: [id])
-  user_id  Int
+  status String 
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+  //Relations
+  //https://www.prisma.io/docs/concepts/components/prisma-schema/relations#disambiguating-relations
+  user_author User @relation(name:"author",fields: [user_author_id], references: [id])
+  user_author_id Int
+  user_assign User? @relation("assigned",fields: [user_assign_id], references: [id])
+  user_assign_id Int?
+  project Project @relation(fields: [project_id], references: [id])
+  project_id Int
 }
+
+model Comment{
+  id Int @id @default(autoincrement())
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+  //Relations
+  author User @relation(fields: [author_id], references: [id])
+  author_id Int
+}
+
+model Project{
+  id Int @id @default(autoincrement())
+  subject String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+  //Relations
+  tickets Ticket[]
+}
+

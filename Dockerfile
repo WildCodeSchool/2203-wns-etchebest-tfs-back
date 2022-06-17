@@ -1,9 +1,10 @@
-FROM node:lts
+FROM node:lts-alpine
 
 RUN mkdir /app
 WORKDIR /app
 COPY package*.json ./
 RUN npm i
+RUN npm i -g typescript ts-node-dev
 COPY src src
 COPY tsconfig.json tsconfig.json
 COPY .env .env

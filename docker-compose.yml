@@ -21,11 +21,11 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: tfs
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
-#   volumes:
-#     - /var/lib/mysql
+  #   volumes:
+  #     - mysql:/var/lib/mysql
 
   adminer:
     image: adminer
@@ -33,3 +33,16 @@ services:
     restart: always
     ports:
       - 8080:8080
+
+  client-tfs:
+    build: ../2203-wns-etchebest-tfs-front/.
+    stdin_open: true
+    container_name: "client"
+    depends_on:
+      - server
+    ports:
+      - 3000:3000
+    volumes:
+      - ../2203-wns-etchebest-tfs-front:/app
+      - /app/node_modules
+      - /app/.next

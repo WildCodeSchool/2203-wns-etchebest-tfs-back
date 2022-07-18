@@ -36,7 +36,7 @@ services:
 
   client-tfs:
     build: ../2203-wns-etchebest-tfs-front/.
-    stdin_open: true
+
     container_name: "client"
     depends_on:
       - server

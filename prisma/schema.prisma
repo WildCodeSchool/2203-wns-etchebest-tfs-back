@@ -21,19 +21,38 @@ generator typegraphql {
 //https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
 model User{
   id Int @id @default(autoincrement())
-  firstname String
-  lastname String
+  firstname String? //optional to allow the user 
+  lastname String?  //to connect just with the email and password
   email String @unique
   password String
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
-  //Relations
+
+  //Relation fields
   comments Comment[]
   tickets_author Ticket[] @relation("author")
   tickets_assign Ticket[] @relation("assigned")
+  tokens Token[]
 }
 
+model Token {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+  type TokenType
+  emailToken String?   @unique // Only used for short lived email tokens
+  valid      Boolean   @default(true)
+  expiration DateTime
 
+  //Relations fields
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+enum TokenType {
+  EMAIL// used as a short-lived token sent to the user's email
+  API 
+}
 
 model Ticket{
   id Int @id @default(autoincrement()) //For a string ID   --- id String @id @default(cuid())
